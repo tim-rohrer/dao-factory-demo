@@ -1,8 +1,8 @@
-import * as MongoDB from "mongodb";
-import { Err, Ok } from "ts-results-es";
+import * as MongoDB from "mongodb"
+import { Err, Ok } from "ts-results-es"
 
-import { QuickenParsedResultDTO } from "../../quicken/quicken.types.js";
-import { DAOActionResult, DatabaseDAO, QuickenDAO } from "../storage.types.js";
+import { QuickenParsedResultDTO } from "../../quicken/quicken.types.js"
+import { DAOActionResult, DatabaseDAO, QuickenDAO } from "../storage.types.js"
 
 export default class MongoQuickenDAO implements QuickenDAO, DatabaseDAO {
   quicken: MongoDB.Collection<QuickenParsedResultDTO>
@@ -55,14 +55,6 @@ export default class MongoQuickenDAO implements QuickenDAO, DatabaseDAO {
           projection: { _id: 0 },
         },
       )
-
-      /** Move next block to service layer */
-      // if (quickenData === null || quickenData === undefined) {
-      //   Logger.debug(
-      //     `MongoQuickenDAO.getUserById ${date} not found in db.`,
-      //   )
-      //   return Err(new NotFoundError({ type: "Quicken Import", id: date }))
-      // }
       return Ok(quickenData)
     } catch (error) {
       return Err(

@@ -1,0 +1,46 @@
+@startuml DAO Classes and Interfaces
+skinparam linetype polyline
+top to bottom direction
+
+package Products {
+  interface QuickenDAO {
+    injectDB?(arg0: MongoDB.MongoClient): void
+    addImport(arg0: Quicken): DAOActionResult<Date, DbOperationError>
+    removeImport(arg0: Date): DAOActionResult<boolean, DbOperationError>
+    getImport(arg0: Date): DAOActionResult<Quicken | null, DbOperationError>
+  }
+  class MongoQuickenDAO implements QuickenDAO
+  class SqliteQuickenDAO implements QuickenDAO
+
+  interface PortfolioDAO {
+    addInvestment(arg0: Investment): DAOActionResult<boolean, DbOperationError>
+    getInvestment(arg0: Id): DAOActionResult<Investment, DbOperationError>
+  }
+  class MongoPortfolioDAO implements PortfolioDAO
+  class SqlitePortfolioDAO implements PortfolioDAO
+}
+
+package "Creator" {
+  interface DAOFactory {
+    + createQuickenDAO(): QuickenDAO
+    + createPortfolioDAO(): PortfolioDAO
+  }
+  class MongoDAOFactory implements DAOFactory {
+    + createQuickenDAO(): QuickenDAO
+    + createPortfolioDAO(): PortfolioDAO
+  }
+  class SqliteDAOFactory implements DAOFactory {
+    + createQuickenDAO(): QuickenDAO
+    + createPortfolioDAO(): PortfolioDAO
+  }
+}
+
+DAOFactory ..r..> QuickenDAO
+DAOFactory ..r..> PortfolioDAO
+hide members
+show DAOFactory methods
+show MongoDAOFactory methods
+show SqliteDAOFactory methods
+show QuickenDAO methods
+show PortfolioDAO methods
+@enduml
